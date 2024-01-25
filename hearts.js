@@ -1,8 +1,8 @@
 class Heart {
-    constructor() {
+    constructor(emoji) {
         this.element = document.createElement('div'); // Create a new div element for the heart
         this.element.classList.add('heart'); // Add 'heart' class to the element for styling
-        this.element.innerText = '❤️'; // Set the heart emoji as the content of the element
+        this.element.innerText = emoji; // Set the passed emoji as the content of the element
         // Set the initial position of the heart to be near the center of the viewport with a random offset
         this.element.style.left = `calc(50vw - 15px + ${(Math.random() * 10) - 5}vw)`;
         this.element.style.top = `calc(50vh - 15px + ${(Math.random() * 10) - 5}vh)`;
@@ -35,17 +35,34 @@ class Heart {
     }
 }
 
+// Function to update the emoji for new hearts
+function changeHeartEmoji(newEmoji) {
+    Heart.prototype.defaultEmoji = newEmoji;
+}
+
+// Add a button to the page for changing the emoji
+function addEmojiChangeButton() {
+    const button = document.createElement('button');
+    button.innerText = 'Change Heart Emoji';
+    button.addEventListener('click', () => {
+        const newEmoji = prompt('Enter a new emoji for the hearts:');
+        if (newEmoji) {
+            changeHeartEmoji(newEmoji);
+        }
+    });
+    document.body.appendChild(button);
+}
+
 const hearts = []; // Array to store all heart instances
 let lastHeartCreationTime = Date.now(); // Timestamp of the last heart creation
 const heartCreationInterval = 25; // Time interval between creating hearts in milliseconds
 
 function update() {
-    const currentTime = Date.now(); // Get the current time
-    // Check if the interval has passed to create a new heart
+    const currentTime = Date.now();
     if (currentTime - lastHeartCreationTime > heartCreationInterval) {
-        const heart = new Heart(); // Create a new heart instance
-        hearts.push(heart); // Add the new heart to the array
-        lastHeartCreationTime = currentTime; // Update the timestamp for the last heart creation
+        const heart = new Heart(Heart.prototype.defaultEmoji || '❤️'); // Use default emoji or fallback to heart
+        hearts.push(heart);
+        lastHeartCreationTime = currentTime;
     }
 
     // Update each heart and remove it from the array if it's out of bounds
@@ -59,5 +76,6 @@ function update() {
 }
 
 window.addEventListener('load', () => {
-    requestAnimationFrame(update); // Start the animation loop when the window loads
+    addEmojiChangeButton(); // Call this function to add the button to the page
+    requestAnimationFrame(update);
 });
