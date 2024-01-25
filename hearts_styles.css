@@ -1,0 +1,10 @@
+body {
+    background: #ecb1ce;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+.heart {
+    position: absolute;
+    font-size: 30px;
+}
