@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Buffon's Needle Simulation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Buffon's Needle Simulation</h1>
+    </header>
+    <main>
+        <div id="controls">
+            <div class="control-group">
+                <label for="needle-count">Needles:</label>
+                <input type="number" id="needle-count" value="1000" min="1" step="10">
+            </div>
+            <button id="drop-btn">Drop</button>
+            <button id="infinite-btn">Drop Infinitely</button>
+            <button id="reset-btn">Reset</button>
+        </div>
+        <div id="simulation-container">
+            <div id="simulation">
+                <h1 style="padding-bottom: 0.5em;">
+                    <img src="Pi-symbol.svg" alt="Pi Symbol" style="height: 1em; vertical-align: middle;"> is officially: <span id="pi-approx"></span>
+                </h1>
+                <canvas id="canvas"></canvas>
+            </div>
+            <div id="results">
+                <h3>Total Needles: <span id="total-needles">0</span></h3>
+                <h3>Crossing Needles: <span id="crossing-needles">0</span></h3>
+                <br>
+                <div>Elapsed Time: <span id="timer">0 s</span></div>
+                <br>
+                <p><i>Needles are half as long as the line distance.</i></p>
+                <br>
+                <p><i>Formula: total / crossing</i></p>
+                <br>
+                <a href="https://en.wikipedia.org/wiki/Buffon%27s_needle_problem#Estimating_%CF%80" target="_blank">More information</a>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
