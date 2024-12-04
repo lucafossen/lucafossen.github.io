@@ -101,16 +101,11 @@ function dropNeedles(numNeedles, isInfinite = false) {
                 break;
             }
 
-            // Select a random segment
-            const segmentIndex = 1 + Math.floor(Math.random() * (numSegments - 1));
-            const xBase = segmentIndex * SPACING;
-
-            // Random relative position within the selected segment
-            const relativeX = Math.random() * SPACING;
-            const xCenter = xBase + relativeX;
+            // Select a random segment and position within it
+            const xCenter = (1 + Math.random() * (numSegments - 1)) * SPACING;
 
             // Adjust Y Center Calculation to prevent needles from going out of bounds
-            const yCenter = Math.random() * (canvas.clientHeight - LENGTH) + (LENGTH / 2);
+            const yCenter = Math.random() * (canvas.height - LENGTH) + (LENGTH / 2);
 
             const angle = Math.random() * Math.PI;
 
@@ -126,9 +121,7 @@ function dropNeedles(numNeedles, isInfinite = false) {
             if (x1 < 0 || x2 > canvas.clientWidth) continue;
 
             // Check for crossing
-            const lineIndex1 = Math.floor(x1 / SPACING);
-            const lineIndex2 = Math.floor(x2 / SPACING);
-            const crossesLine = lineIndex1 !== lineIndex2;
+            const crossesLine = Math.floor(x1 / SPACING) !== Math.floor(x2 / SPACING);
 
             // Draw needle
             drawNeedle(x1, y1, x2, y2, crossesLine);
