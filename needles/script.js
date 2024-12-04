@@ -16,7 +16,7 @@ let isRunning = false;
 let animationFrameId = null;
 
 // Global constants for line spacing and needle length
-const SPACING = 100;
+const SPACING = 80;
 const LENGTH = SPACING / 2;
 
 // Set canvas dimensions with proper scaling for high DPI displays
@@ -77,7 +77,7 @@ function dropNeedles(numNeedles, isInfinite = false) {
     startTimer();
 
     // Calculate the number of segments (lines) on the canvas
-    const numSegments = Math.floor(canvas.clientWidth / SPACING); // Uses clientWidth for logical pixels
+    const numSegments = Math.floor(canvas.width / SPACING);
 
     let batchSize = isInfinite ? 10000 : Math.max(1, Math.floor((numNeedles - totalNeedles) / 100));
     function dropBatch() {
@@ -94,6 +94,8 @@ function dropNeedles(numNeedles, isInfinite = false) {
             return;
         }
 
+        const numSegments = Math.floor(canvas.width / SPACING);
+
         for (let i = 0; i < batchSize; i++) {
             if (!isRunning) break;
             if (!isInfinite && totalNeedles >= numNeedles) {
@@ -101,12 +103,16 @@ function dropNeedles(numNeedles, isInfinite = false) {
                 break;
             }
 
-            // Select a random segment and position within it
-            const xCenter = (1 + Math.random() * (numSegments - 1)) * SPACING;
+            // Random relative position between two given lines (from 0 to spacing)
+            const relativeX = Math.random() * SPACING;
 
-            // Adjust Y Center Calculation to prevent needles from going out of bounds
-            const yCenter = Math.random() * (canvas.height - LENGTH) + (LENGTH / 2);
+            // Randomly determine which segment (line) the needle is placed in
+            const segmentIndex = Math.floor(Math.random() * numSegments);
+            const xBase = segmentIndex * SPACING;
 
+            // Compute the actual xCenter position
+            const xCenter = xBase + relativeX;
+            const yCenter = Math.random() * canvas.height;
             const angle = Math.random() * Math.PI;
 
             const deltaX = (LENGTH / 2) * Math.cos(angle);
@@ -117,11 +123,10 @@ function dropNeedles(numNeedles, isInfinite = false) {
             const x2 = xCenter + deltaX;
             const y2 = yCenter + deltaY;
 
-            // Ensure needles stay within canvas horizontally
-            if (x1 < 0 || x2 > canvas.clientWidth) continue;
-
             // Check for crossing
-            const crossesLine = Math.floor(x1 / SPACING) !== Math.floor(x2 / SPACING);
+            const lineIndex1 = Math.floor(x1 / SPACING);
+            const lineIndex2 = Math.floor(x2 / SPACING);
+            const crossesLine = lineIndex1 !== lineIndex2;
 
             // Draw needle
             drawNeedle(x1, y1, x2, y2, crossesLine);
